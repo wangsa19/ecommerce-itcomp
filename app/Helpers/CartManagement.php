@@ -26,15 +26,52 @@ class CartManagement
             $cart_items[$exiting_item]['quantity']++;
             $cart_items[$exiting_item]['total_amount'] = $cart_items[$exiting_item]['quantity'] * $cart_items[$exiting_item]['unit_amount'];
         } else {
-            $produt = Product::where('id', $product_id)->first(['id', 'name', 'price', 'image']);
-            if ($produt) {
+            $product = Product::where('id', $product_id)->first(['id', 'name', 'price', 'images']);
+            // dd($product);
+            if ($product) {
                 $cart_items[] = [
-                    'product_id' => $produt->id,
-                    'name' => $produt->name,
-                    'unit_amount' => $produt->price,
+                    'product_id' => $product->id,
+                    'name' => $product->name,
+                    'unit_amount' => $product->price,
                     'quantity' => 1,
-                    'total_amount' => $produt->price,
-                    'image' => $produt->image
+                    'total_amount' => $product->price,
+                    'image' => $product->images[0]
+                ];
+            }
+        }
+
+        self::addCartItemsToCookie($cart_items);
+        return count($cart_items);
+    }
+
+    // add item to cart
+    static public function addItemToCartWithQty($product_id, $qty = 1)
+    {
+        $cart_items = self::getCardItemsFromCookie();
+
+        $exiting_item = null;
+
+        foreach ($cart_items as $key => $item) {
+            if ($item['product_id'] == $product_id) {
+                $exiting_item = $key;
+                break;
+            }
+        }
+
+        if ($exiting_item !== null) {
+            $cart_items[$exiting_item]['quantity'] = $qty;
+            $cart_items[$exiting_item]['total_amount'] = $cart_items[$exiting_item]['quantity'] * $cart_items[$exiting_item]['unit_amount'];
+        } else {
+            $product = Product::where('id', $product_id)->first(['id', 'name', 'price', 'images']);
+            // dd($product);
+            if ($product) {
+                $cart_items[] = [
+                    'product_id' => $product->id,
+                    'name' => $product->name,
+                    'unit_amount' => $product->price,
+                    'quantity' => $qty,
+                    'total_amount' => $product->price,
+                    'image' => $product->images[0]
                 ];
             }
         }
