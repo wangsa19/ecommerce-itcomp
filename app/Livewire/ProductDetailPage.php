@@ -36,11 +36,14 @@ class ProductDetailPage extends Component
     public function increaseQty($product_id)
     {
         $this->quantity++;
+        logger('Quantity increased to: ' . $this->quantity);
     }
+
     public function decreaseQty($product_id)
     {
         if ($this->quantity > 1) {
             $this->quantity--;
+            logger('Quantity decreased to: ' . $this->quantity);
         }
     }
 

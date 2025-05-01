@@ -127,8 +127,8 @@ class CartManagement
 
         foreach ($cart_items as $key => $item) {
             if ($item['product_id'] == $product_id) {
-                $cart_items['$key']['quantity']++;
-                $cart_items['$key']['total_amount'] = $cart_items[$key]['quantity'] * $cart_items[$key]['unit_amount'];
+                $cart_items[$key]['quantity']++;
+                $cart_items[$key]['total_amount'] = $cart_items[$key]['quantity'] * $cart_items[$key]['unit_amount'];
             }
         }
 
